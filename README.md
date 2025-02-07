@@ -1,5 +1,3 @@
-##ExaGrade
-
 ## 🚀 How to Run ExaGrade on Your Local Machine
 
 Follow these steps to set up **ExaGrade** on your local machine.
