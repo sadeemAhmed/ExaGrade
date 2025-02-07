@@ -1,4 +1,4 @@
-###ExaGrade
+##ExaGrade
 
 ## 🚀 How to Run ExaGrade on Your Local Machine
 
