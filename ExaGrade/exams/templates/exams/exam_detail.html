@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold text-gray-800">{{ exam.name }}</h1>
+    <p class="text-gray-600 mt-2">Course: {{ exam.course.name }}</p>
+
+    <!-- Exam Status -->
+    <div class="mt-4">
+        <span class="text-lg font-semibold">Status:</span>
+        {% if exam.status == "done" %}
+            <span class="text-green-500 font-semibold">Completed</span>
+        {% elif exam.status == "progress" %}
+            <span class="text-yellow-500 font-semibold">In Progress</span>
+        {% else %}
+            <span class="text-gray-500">Pending</span>
+        {% endif %}
+    </div>
+
+    <!-- Uploaded Student Paper -->
+    <div class="mt-6">
+        <h2 class="text-xl font-bold text-gray-800">Uploaded Student Paper</h2>
+        {% if exam.student_paper %}
+            <p><a href="{{ exam.student_paper.url }}" class="text-blue-500 hover:underline">
+                Download Student Paper
+            </a></p>
+        {% else %}
+            <p class="text-gray-500 mt-2">No student paper uploaded yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Grading Section -->
+    {% if user.is_instructor %}
+        <div class="mt-6">
+            <h2 class="text-xl font-bold text-gray-800">Grading</h2>
+            <p class="text-gray-600">Click the button below to start grading.</p>
+            <a href="{% url 'exams:grade_exam' exam.id %}" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                Start Grading
+            </a>
+        </div>
+    {% endif %}
+</div> 
+{% endblock %}

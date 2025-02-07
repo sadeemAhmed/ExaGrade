@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold text-gray-800">{{ course.name }}</h1>
+    <p class="text-gray-600 mt-2">{{ course.description }}</p>
+
+    <!-- Show Course Code (Instructor Only) -->
+    {% if request.user.is_instructor %}
+    <div class="mt-4 bg-gray-100 p-3 rounded-md">
+        <p class="text-sm text-gray-700">Share this course code for students to enroll:</p>
+        <span class="font-bold text-lg text-blue-600">{{ course.course_code }}</span>
+    </div>
+    {% endif %}
+
+    <!-- Exams Table -->
+    <h2 class="text-xl font-semibold text-gray-800 mt-6">Exams</h2>
+    <div class="mt-2 overflow-x-auto">
+        {% if exams %}
+            <table class="w-full border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100 text-left">
+                        <th class="p-3 border border-gray-300">Exam Name</th>
+                        {% if request.user.is_instructor %}
+                        <th class="p-3 border border-gray-300">Status</th>
+                        <th class="p-3 border border-gray-300">Students Grades</th>
+                        {% else %}
+                        <th class="p-3 border border-gray-300">Your Grade</th>
+                        <th class="p-3 border border-gray-300">View Feedback</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for exam in exams %}
+                    <tr>
+                        <td class="p-3 border border-gray-300">
+                            <a href="{% url 'exams:detail' exam.id %}" class="text-blue-500 hover:underline">
+                                {{ exam.name }}
+                            </a>
+                        </td>
+
+                        {% if request.user.is_instructor %}
+                        <!-- Exam Status -->
+                        <td class="p-3 border border-gray-300">
+                            {% if exam.status == "done" %}
+                                <span class="text-green-500 font-semibold">🟢 Done</span>
+                            {% elif exam.status == "progress" %}
+                                <span class="text-yellow-500 font-semibold">🟡 In Progress</span>
+                            {% else %}
+                                <span class="text-gray-500 font-semibold">Pending</span>
+                            {% endif %}
+                        </td>
+                        <!-- View Grades -->
+                        <td class="p-3 border border-gray-300">
+                            <a href="{% url 'exams:exam_students_grades' exam.id %}" class="text-blue-500 hover:underline">
+                                View Grades
+                            </a>
+                        </td>
+
+                        {% else %}
+                        <!-- Student's Grade -->
+                        <td class="p-3 border border-gray-300">
+                            {% with student_grade=exam.grades.first %}
+                                {% if student_grade and student_grade.grade %}
+                                    {{ student_grade.grade }}
+                                {% else %}
+                                    <span class="text-gray-500">Not Graded Yet</span>
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                        <!-- View Feedback -->
+                        <td class="p-3 border border-gray-300">
+                            {% with student_grade=exam.grades.first %}
+                                {% if student_grade and student_grade.feedback %}
+                                    <a href="#" class="text-green-500 hover:underline">
+                                        View Feedback
+                                    </a>
+                                {% else %}
+                                    <span class="text-gray-500">No Feedback Yet</span>
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-gray-500">No exams available for this course.</p>
+        {% endif %}
+    </div>
+
+    <!-- Enrolled Students Table (Instructor Only) -->
+    {% if request.user.is_instructor %}
+    <h2 class="text-xl font-semibold text-gray-800 mt-6">Enrolled Students</h2>
+    <div class="mt-2 overflow-x-auto">
+        {% if students %}
+            <table class="w-full border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100 text-left">
+                        <th class="p-3 border border-gray-300">Student Name</th>
+                        <th class="p-3 border border-gray-300">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td class="p-3 border border-gray-300 text-gray-700">{{ student.username }}</td>
+                        <td class="p-3 border border-gray-300">
+                            <a href="{% url 'exams:student_grades' student.id %}" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                            View Student's Grades
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-gray-500">No students enrolled yet.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Show Instructor Details for Students -->
+    {% if not request.user.is_instructor %}
+    <h2 class="text-xl font-semibold text-gray-800 mt-6">Instructor</h2>
+    <div class="mt-2 p-4 bg-gray-100 rounded-md">
+        <p class="text-gray-700 font-bold">{{ course.instructor.username }}</p>
+        <p class="text-gray-600">{{ course.instructor.email }}</p>
+    </div>
+    {% endif %}
+
+</div>  
+{% endblock %}
