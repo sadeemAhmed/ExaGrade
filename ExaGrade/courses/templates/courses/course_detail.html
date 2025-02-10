@@ -130,5 +130,38 @@
     </div>
     {% endif %}
 
+    <!-- Delete Course Button (Instructor Only) -->
+    {% if request.user.is_instructor %}
+    <button onclick="showModal()" class="mt-6 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+        Delete Course
+    </button>
+    {% endif %}
 </div>  
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white w-96 p-6 rounded-lg shadow-lg text-center">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Are you sure you want to delete this course?</h2>
+        <p class="text-gray-600">This action cannot be undone.</p>
+
+        <div class="mt-4 flex justify-center space-x-4">
+            <button onclick="hideModal()" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition">
+                Cancel
+            </button>
+            <a href="{% url 'courses:delete' course.id %}" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+                Yes, Delete
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showModal() {
+        document.getElementById("deleteModal").classList.remove("opacity-0", "pointer-events-none");
+    }
+
+    function hideModal() {
+        document.getElementById("deleteModal").classList.add("opacity-0", "pointer-events-none");
+    }
+</script>
 {% endblock %}

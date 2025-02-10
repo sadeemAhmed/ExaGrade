@@ -7,9 +7,7 @@
     <!-- Courses Section -->
     <div class="mt-6">
         <h2 class="text-xl font-bold text-gray-800">Your Courses</h2>
-        <a href="{% url 'courses:add' %}" class="mt-3 inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-            + Add Course
-        </a>
+
         {% if courses %}
             <ul class="mt-4">
                 {% for course in courses %}
