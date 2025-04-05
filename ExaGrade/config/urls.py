@@ -27,6 +27,8 @@ urlpatterns = [
     path("users/", include("users.urls")),  
     path("courses/", include("courses.urls", namespace="courses")),  
     path("exams/", include("exams.urls", namespace="exams")), 
+    path('electronic-exam/', include('electronic_exam.urls', namespace='electronic_exam')),
+
 ]
 
 if settings.DEBUG:

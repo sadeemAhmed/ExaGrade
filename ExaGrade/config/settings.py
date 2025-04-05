@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'users',
     'courses',
     'exams',
+    'electronic_exam', 
+    
+
 ]
 
 MIDDLEWARE = [

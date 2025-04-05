@@ -1,13 +1,18 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExaGrade</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- FontAwesome for icons -->
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ExaGrade</title>
+    
+        <!-- ✅ Font Awesome (Only This) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Mnt3zQbKLTyoZzAJ3Hfr6eLgoxSXLdOnGoK8iD4S3oFys9u0nlofsU9MGWTxbsYuTSHTehYV9MsVIkK+w6SVA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    
 <body class="bg-gray-100 relative">
 
     <!-- Toast Messages -->
@@ -24,7 +29,6 @@
         {% endfor %}
     </div>
     <script>
-        // Auto-hide messages after 3 seconds
         setTimeout(function() {
             let messageBox = document.getElementById("message-container");
             if (messageBox) {
@@ -37,8 +41,8 @@
 
     <div class="flex h-screen">
 
-        <!-- Sidebar (Hidden on Mobile) -->
-        <nav id="sidebar" class="w-64 bg-[#1C304F] text-white p-5 fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:block z-50">
+        <!-- Sidebar (Now Full Height & Scrollable) -->
+        <nav id="sidebar" class="w-64 bg-[#1C304F] text-white p-5 fixed inset-y-0 left-0 overflow-y-auto h-screen transform -translate-x-full transition-transform duration-300 ease-in-out md:translate-x-0 md:block z-50">
             <h2 class="text-3xl font-bold mb-4">ExaGrade</h2>
             <ul class="mt-6 space-y-2">
                 {% if user.is_authenticated %}
@@ -72,15 +76,16 @@
                         <li>
                             <a href="{% url 'exams:list' %}" class="flex items-center space-x-2 hover:text-[#98BBF5]">
                                 <i class="fas fa-file-alt"></i>
-                                <span>Exams</span>
+                                <span>Paper Exams</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{% url 'exams:add' %}" class="flex items-center space-x-2 hover:text-[#98BBF5]">
-                                <i class="fas fa-plus-circle"></i>
-                                <span>New Exam</span>
-                            </a>
+                                <a href="{% url 'electronic_exams:exam_list' %}" class="flex items-center space-x-2 hover:text-[#98BBF5]">
+                                    <i class="fas fa-laptop-code"></i>
+                                    <span>Electronic Exams</span>
+                                </a>                                         
                         </li>
+                        
                     {% endif %}
 
                     <!-- Profile, Settings, Logout -->
@@ -116,10 +121,11 @@
             </button>
         </div>
 
-        <!-- Main Content Area -->
-        <div class="flex-1 p-10 ml-0 md:ml-64">
+        <!-- Main Content Area (Adjusted for Sidebar) -->
+        <main class="flex-1 p-10 ml-0 md:ml-64 overflow-y-auto">
             {% block content %} {% endblock %}
-        </div>
+        </main>
+
     </div>
 
     <!-- JavaScript for Sidebar Toggle -->
@@ -137,5 +143,6 @@
             }
         }
     </script>
+
 </body>  
 </html>
